@@ -6,21 +6,25 @@ struct Tree
     int data;
     Tree* left = NULL;
     Tree* right = NULL; 
+    bool bal;
 };
 
+void b2insert(int data, Tree*& p);
+int search(const int searchKey, Tree* head);
+
 // Вставка элемента в дерево
-void insert(Tree*& root, int data) {
-    if (root == NULL) {
-        root = new Tree;
-        root->data = data;
-    }
-    else if (data <= root->data) {
-        insert(root->left, data);
-    }
-    else {
-        insert(root->right, data);
-    }
-}
+//void insert(Tree*& root, int data) {
+//    if (root == NULL) {
+//        root = new Tree;
+//        root->data = data;
+//    }
+//    else if (data <= root->data) {
+//        insert(root->left, data);
+//    }
+//    else {
+//        insert(root->right, data);
+//    }
+//}
 
 //слева направо
 void leftToRight(Tree* root) {

@@ -1,4 +1,5 @@
-﻿#include "header.h"
+﻿
+#include "header.h"
 
 int main()
 {
@@ -8,7 +9,7 @@ int main()
     read_bd(array_pointer);
     menu(array_pointer);
 
-}
+}  
 
 void menu(Enterprise** arr)
 {

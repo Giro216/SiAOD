@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Lab_1.cpp" />
+    <ClCompile Include="Lab_6.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h" />
