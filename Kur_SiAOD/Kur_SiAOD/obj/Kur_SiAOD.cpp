@@ -14,6 +14,10 @@ int main()
 void menu(Enterprise** arr)
 {
     int button = 0;
+    bool button3 = false;
+    bool button4 = false;
+    queue queue_of_found;
+
     while (button != 5)
     {
         switch (button)
@@ -24,7 +28,7 @@ void menu(Enterprise** arr)
             cout << "1\t" << "Write bd" << endl;
             cout << "2\t" << "Sort & write bd" << endl;
             cout << "3\t" << "Search" << endl;
-            cout << "4\t" << "********" << endl;
+            cout << "4\t" << "Tree" << endl;
             cout << "5\t" << "EXIT" << endl;
 
             cin >> button;
@@ -54,9 +58,58 @@ void menu(Enterprise** arr)
             cin >> key;
 
             int found = bin_search(arr, key);
-            queue queue_of_found = create_queue(arr, found, key);
+            queue_of_found = create_queue(arr, found, key);
             print_queue(&queue_of_found);
 
+            button3 = true;
+            button = 0;
+            break;
+        }
+        case(4):
+        {
+            //system("CLS");
+
+            if (button3 == false) {
+                cout << "ERROR" << endl;
+                cout << "Search something before creating a tree" << endl;
+                cout << "Press any key to continue" << endl;
+                int esc = _getch();
+                button = 3;
+                break;
+            }
+
+            B2_Tree* root = NULL;
+            create_tree(root, &queue_of_found);
+            print_tree(root);
+
+            unsigned short dep_number;
+            int KB_code = 0;
+            while (KB_code != KB_ESCAPE)
+            {
+                cout << "To search, write a dep_number" << endl;
+                cin >> dep_number;
+                B2_Tree* founded_root = tree_search(dep_number, root); 
+                
+                if (founded_root == NULL){
+                    cout << "Key didn't found" << endl;
+                }
+                else{
+                    spis* temp = founded_root->equal_items;
+
+                    cout << founded_root->data.name << "\t" << founded_root->data.job << "\t" << founded_root->data.dep_number << "\t" << founded_root->data.date << endl;
+                    while (temp != NULL)
+                    {
+                        cout << temp->data.name << "\t" << temp->data.job << "\t" << temp->data.dep_number << "\t" << temp->data.date << endl;
+                        temp = temp->next;
+                    }
+                }
+                
+                cout << "\nTo search other dep_number press any key" << endl;
+                cout << "But to exit press Esc\n" << endl;
+                KB_code = _getch();
+            }
+
+            system("CLS");
             button = 0;
             break;
         }
@@ -301,5 +354,122 @@ void print_queue(queue *head)
         cout << "\nTo exit press Esc" << endl;
         KB_code = _getch();
         system("CLS");
+    }
+}
+
+void create_tree(B2_Tree *&root, queue* queue_t)
+{
+    int VR = 1;
+    int HR = 1;
+    spis* temp = queue_t->head;
+    while (temp != NULL)
+    {
+        B2_insert(temp->data, root, VR, HR);
+        temp = temp->next;
+    }
+    delete temp;
+}
+
+void B2_insert(Enterprise data, B2_Tree*& p, int &VR, int &HR)
+{
+    if (p == NULL)
+    {
+        p = new B2_Tree;
+        p->data = data;
+        p->left = p->right = NULL;
+        p->bal = 0;
+        VR = 1;
+    }
+    else if (data.dep_number < p->data.dep_number)
+    {
+
+        B2_insert(data, p->left, VR, HR);
+        if (VR == 1)
+        {
+            if (p->bal == 0) // эемент один на странице
+            {
+                B2_Tree* q = p->left;
+                p->left = q->right;
+                q->right = p;
+                p = q;
+                q->bal = 1;
+                HR = 1;
+                VR = 0;
+            }
+            else {
+                p->bal = 0;
+                VR = 1;
+                HR = 0;
+            }
+        }
+        else {
+            HR = 0;
+        }
+    }
+    else if (data.dep_number > p->data.dep_number) 
+    {
+        B2_insert(data, p->right, VR, HR);
+        if (VR == 1)
+        {
+            p->bal = 1;
+            HR = 1;
+            VR = 0;
+        }
+        else if (HR == 1)
+        {
+            if (p->bal == 1)
+            {
+                B2_Tree* q = p->right;
+                p->bal = 0;
+                q->bal = 0;
+                p->right = q->left;
+                q->left = p;
+                p = q;
+                VR = 1;
+                HR = 0;
+            }
+        }
+    }
+    else if (p->data.dep_number == data.dep_number){
+        // создаю стек
+        spis *temp = p->equal_items;
+        spis* current = new spis(data);
+        p->equal_items = current;
+        p->equal_items->next = temp;
+    }
+}
+
+B2_Tree* tree_search(unsigned short int searchKey, B2_Tree* head) {
+    B2_Tree* current = head;
+    while (current != nullptr) {
+        if (searchKey < current->data.dep_number) {
+            current = current->left;
+        }
+        else if (searchKey > current->data.dep_number) {
+            current = current->right;
+        }
+        else {                                             
+            return current; // Key found.
+        }
+    }
+    return NULL;
+
+}
+
+void print_tree(B2_Tree*& root)
+{
+    if (root != NULL) {
+        print_tree(root->left);
+        cout << root->data.name << "\t" << root->data.job << "\t" << root->data.dep_number << "\t" << root->data.date << endl;
+        if (root->equal_items != NULL)
+        {
+            spis* temp = root->equal_items;
+            while (temp != NULL)
+            {
+                cout << temp->data.name << "\t" << temp->data.job << "\t" << temp->data.dep_number << "\t" << temp->data.date << endl;
+                temp = temp->next;
+            }
+        }
+        print_tree(root->right);
     }
 }

@@ -28,6 +28,7 @@ struct spis {
 	spis(Enterprise data) : data(data) { 
 		next = NULL; 
 	}
+	~spis() {}
 
 	Enterprise data;
 	spis* next;
@@ -37,6 +38,15 @@ struct queue
 {
 	spis *head;
 	spis *tail;
+};
+
+struct B2_Tree
+{
+	Enterprise data;
+	B2_Tree* left = NULL;
+	B2_Tree* right = NULL;
+	bool bal;
+	spis* equal_items = NULL;
 };
 
 void menu(Enterprise** arr);
@@ -49,3 +59,7 @@ int compression(Enterprise* left_p, Enterprise* right_p);
 int bin_search(Enterprise** arr, int& key);
 queue create_queue(Enterprise** arr, int index, int key);
 void print_queue(queue *head);
+void create_tree(B2_Tree*& root, queue* queue_t);
+void B2_insert(Enterprise data, B2_Tree*& p, int& VR, int& HR);
+B2_Tree* tree_search(unsigned short int searchKey, B2_Tree* head);
+void print_tree(B2_Tree*& root);
