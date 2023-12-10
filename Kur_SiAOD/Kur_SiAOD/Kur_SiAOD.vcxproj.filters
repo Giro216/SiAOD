@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="obj\testBase2.dat" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="obj\Kur_SiAOD.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -23,8 +26,5 @@
     <ClInclude Include="obj\header.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="obj\testBase2.dat" />
   </ItemGroup>
 </Project>

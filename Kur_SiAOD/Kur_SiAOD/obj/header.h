@@ -5,8 +5,9 @@
 #include <locale>
 #include <conio.h>
 #include <sstream>
-#include <vector>
 #include <algorithm>
+#include <set>
+#include <vector>
 using namespace std;
 
 #define KB_UP 72
@@ -49,6 +50,19 @@ struct B2_Tree
 	spis* equal_items = NULL;
 };
 
+struct code_huf
+{
+	code_huf(char a) : letter(a) {
+		frequence = 1;
+		code_len = 1;
+	}
+	~code_huf() {}
+	char letter;
+	int frequence;
+	double probabilitie;
+	int code_len;
+};
+
 void menu(Enterprise** arr);
 void print_bd(Enterprise** arr);
 void read_bd(Enterprise** arr);
@@ -63,3 +77,8 @@ void create_tree(B2_Tree*& root, queue* queue_t);
 void B2_insert(Enterprise data, B2_Tree*& p, int& VR, int& HR);
 B2_Tree* tree_search(unsigned short int searchKey, B2_Tree* head);
 void print_tree(B2_Tree*& root);
+void Huffman_code(Enterprise** arr);
+void Huffman(vector<code_huf>& alf, int** code, int n);
+int Up(vector<code_huf>& alf, int** code, int n, double q);
+void Down(vector<code_huf>& alf, int** code, int n, int j);
+double CodeBase(vector<code_huf>& alf, int** code);

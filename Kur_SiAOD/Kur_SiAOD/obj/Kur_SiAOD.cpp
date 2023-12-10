@@ -1,15 +1,12 @@
-﻿
-#include "header.h"
+﻿#include "header.h"
 
 int main()
 {
-    //setlocale(LC_ALL, "cp-866");
-    //system("chcp 866");
-    Enterprise **array_pointer = new Enterprise * [4000];
+    Enterprise** array_pointer = new Enterprise * [4000];
     read_bd(array_pointer);
-    menu(array_pointer);
+    menu(array_pointer);    
 
-}  
+}
 
 void menu(Enterprise** arr)
 {
@@ -18,18 +15,19 @@ void menu(Enterprise** arr)
     bool button4 = false;
     queue queue_of_found;
 
-    while (button != 5)
+    while (button != 6)
     {
         switch (button)
         {
         case(0):
         {
             system("CLS");
-            cout << "1\t" << "Write bd" << endl;
+            cout << "1\t" << "Print bd" << endl;
             cout << "2\t" << "Sort & write bd" << endl;
             cout << "3\t" << "Search" << endl;
             cout << "4\t" << "Tree" << endl;
-            cout << "5\t" << "EXIT" << endl;
+            cout << "5\t" << "Code bd" << endl;
+            cout << "6\t" << "EXIT" << endl;
 
             cin >> button;
             break;
@@ -52,7 +50,7 @@ void menu(Enterprise** arr)
         case(3):
         {
             system("CLS");
-            
+
             int key;
             cout << "Enter date of birthday" << endl;
             cin >> key;
@@ -67,8 +65,6 @@ void menu(Enterprise** arr)
         }
         case(4):
         {
-            //system("CLS");
-
             if (button3 == false) {
                 cout << "ERROR" << endl;
                 cout << "Search something before creating a tree" << endl;
@@ -88,12 +84,12 @@ void menu(Enterprise** arr)
             {
                 cout << "To search, write a dep_number" << endl;
                 cin >> dep_number;
-                B2_Tree* founded_root = tree_search(dep_number, root); 
-                
-                if (founded_root == NULL){
+                B2_Tree* founded_root = tree_search(dep_number, root);
+
+                if (founded_root == NULL) {
                     cout << "Key didn't found" << endl;
                 }
-                else{
+                else {
                     spis* temp = founded_root->equal_items;
 
                     cout << founded_root->data.name << "\t" << founded_root->data.job << "\t" << founded_root->data.dep_number << "\t" << founded_root->data.date << endl;
@@ -103,13 +99,26 @@ void menu(Enterprise** arr)
                         temp = temp->next;
                     }
                 }
-                
+
                 cout << "\nTo search other dep_number press any key" << endl;
                 cout << "But to exit press Esc\n" << endl;
                 KB_code = _getch();
             }
 
             system("CLS");
+            button = 0;
+            break;
+        }
+        case(5): 
+        {
+            system("CLS");
+            int KB_code = 0;
+            while (KB_code != KB_ESCAPE)
+            {
+                Huffman_code(arr);
+                cout << "To exit press Esc\n" << endl;
+                KB_code = _getch();
+            }
             button = 0;
             break;
         }
@@ -122,7 +131,7 @@ void menu(Enterprise** arr)
         }
     }
 }
-   
+
 void read_bd(Enterprise** arr)
 {
     ifstream bd("obj/testBase2.dat", ios::binary);
@@ -176,7 +185,6 @@ void print_bd(Enterprise** arr)
             count -= 40;
             if (count < 0)
             {
-                //cout << "it's a start of bd. Please choose -> or pgdn" << endl;
                 count = 4000;
                 for (int i = 0; i < 20; i++)
                 {
@@ -205,7 +213,7 @@ void print_bd(Enterprise** arr)
             break;
         }
     }
-    
+
 }
 
 void HeapSort_bd(Enterprise** array_pointer)
@@ -235,7 +243,7 @@ void Create_New_Heap(Enterprise** array_pointer, Enterprise* key, int L, int R)
         if (j > R) {
             break;
         }
-        if (j < R && (compression(array_pointer[j + 1], array_pointer[j]) == 1)){  //array_pointer[j + 1] > array_pointer[j]
+        if (j < R && (compression(array_pointer[j + 1], array_pointer[j]) == 1)) {
             j++;
         }
         if (compression(key, array_pointer[j]) == 1) {
@@ -328,7 +336,7 @@ queue create_queue(Enterprise** arr, int index, int key)
     queue_t->head = current_spis;
 
     ++index;
-    while ((index < N) && (Split_to_int(arr[index]->date, '-') == key) )
+    while ((index < N) && (Split_to_int(arr[index]->date, '-') == key))
     {
         spis* temp = new spis(*arr[index]);
         current_spis->next = temp;
@@ -339,7 +347,7 @@ queue create_queue(Enterprise** arr, int index, int key)
     return *queue_t;
 }
 
-void print_queue(queue *head)
+void print_queue(queue* head)
 {
     int KB_code = 0;
     while (KB_code != KB_ESCAPE)
@@ -357,7 +365,7 @@ void print_queue(queue *head)
     }
 }
 
-void create_tree(B2_Tree *&root, queue* queue_t)
+void create_tree(B2_Tree*& root, queue* queue_t)
 {
     int VR = 1;
     int HR = 1;
@@ -370,7 +378,7 @@ void create_tree(B2_Tree *&root, queue* queue_t)
     delete temp;
 }
 
-void B2_insert(Enterprise data, B2_Tree*& p, int &VR, int &HR)
+void B2_insert(Enterprise data, B2_Tree*& p, int& VR, int& HR)
 {
     if (p == NULL)
     {
@@ -386,7 +394,7 @@ void B2_insert(Enterprise data, B2_Tree*& p, int &VR, int &HR)
         B2_insert(data, p->left, VR, HR);
         if (VR == 1)
         {
-            if (p->bal == 0) // эемент один на странице
+            if (p->bal == 0) 
             {
                 B2_Tree* q = p->left;
                 p->left = q->right;
@@ -406,7 +414,7 @@ void B2_insert(Enterprise data, B2_Tree*& p, int &VR, int &HR)
             HR = 0;
         }
     }
-    else if (data.dep_number > p->data.dep_number) 
+    else if (data.dep_number > p->data.dep_number)
     {
         B2_insert(data, p->right, VR, HR);
         if (VR == 1)
@@ -430,9 +438,8 @@ void B2_insert(Enterprise data, B2_Tree*& p, int &VR, int &HR)
             }
         }
     }
-    else if (p->data.dep_number == data.dep_number){
-        // создаю стек
-        spis *temp = p->equal_items;
+    else if (p->data.dep_number == data.dep_number) {
+        spis* temp = p->equal_items;
         spis* current = new spis(data);
         p->equal_items = current;
         p->equal_items->next = temp;
@@ -448,8 +455,8 @@ B2_Tree* tree_search(unsigned short int searchKey, B2_Tree* head) {
         else if (searchKey > current->data.dep_number) {
             current = current->right;
         }
-        else {                                             
-            return current; // Key found.
+        else {
+            return current; 
         }
     }
     return NULL;
@@ -472,4 +479,174 @@ void print_tree(B2_Tree*& root)
         }
         print_tree(root->right);
     }
+}
+
+double cmp(code_huf a, code_huf b) {
+    return a.probabilitie > b.probabilitie;
+}
+
+void Huffman_code(Enterprise** arr) {
+    system("chcp 1251");
+    system("CLS");
+    vector<code_huf> alf;
+
+    FILE* stream;
+    fopen_s(&stream, "obj/testBase2.dat", "r");
+    if (stream == NULL) {
+        cout << "file didn't open";
+        exit(1);
+    }
+    while (!feof(stream)) {
+        char curr = getc(stream);
+        code_huf* temp = new code_huf(curr);
+        bool search = 0;
+        for (auto &it : alf) {
+            if (it.letter == curr) {
+                search = 1;
+                ++(it.frequence);
+            }
+        }
+        if (search == 0) {
+            alf.push_back(*temp);
+        }
+        
+    }
+    fclose(stream);
+    alf.pop_back();
+
+    const int size = alf.size();
+    int sum = 0;
+
+    for (auto &it : alf) {
+        sum += it.frequence;
+    }
+
+    for (auto &it : alf) {
+        it.probabilitie = it.frequence / (double)sum;
+    }
+
+    double entr = 0;
+    for (auto &it : alf) {
+        entr += it.probabilitie * log2(it.probabilitie);
+    }
+    entr = -entr;
+
+    sort(alf.begin(), alf.end(), cmp);
+
+    int** code = new int* [size];
+    for (int i = 0; i < size; i++)
+        code[i] = new int[size];
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            code[i][j] = 0;
+
+    Huffman(alf,code, size-1);
+    
+    double avr_len = 0;
+    for (auto &it : alf) {
+        avr_len += it.code_len * it.probabilitie;
+    }
+
+    cout << "|letter|\t|code_len|\t|probabilitie|\t|code|" << endl;
+    for (int i = 0; i < size; i++) {
+        cout << "|" << alf[i].letter << "|\t\t|" << alf[i].code_len << "|\t\t|" << alf[i].probabilitie << "|\t|";
+
+        for (int j = 0; j < alf[i].code_len; j++) {
+            cout << code[i][j];
+        }cout << "|\n";
+    }
+
+    cout << "Entropy: " << entr << "\nHuffman: " << avr_len << endl;
+    double compression = CodeBase(alf, code);
+    cout << "compression = " << compression << endl;
+}
+
+void Huffman(vector<code_huf> &alf, int** code, int n) {
+    if (n == 1)
+    {
+        code[0][0] = 0;
+        code[1][0] = 1;
+        alf[0].code_len = alf[1].code_len = 1;
+    }
+    else
+    {
+        double q = alf[n - 1].probabilitie + alf[n].probabilitie;
+        int j = Up(alf, code, n, q);
+        Huffman(alf, code, n-1);
+        Down(alf, code, n, j);
+    }
+}
+
+int Up(vector<code_huf>& alf, int** code, int n, double q) {
+    int j = 0;
+    for (int i = n - 2; i >= 0; i--) {
+        if (alf[i].probabilitie <= q) {
+            alf[i + 1].probabilitie = alf[i].probabilitie;
+        }
+        else {
+            j = i;
+            break;
+        }
+    }
+    alf[j].probabilitie = q;
+    return j;
+}
+
+
+void Down(vector<code_huf>& alf, int** code, int n, int j) {
+    int M = alf.size();
+    int* S = new int[M];
+    for (int i = 0; i < M; i++)
+        S[i] = code[j][i];
+    int L = alf[j].code_len;
+    for (int i = j; i < n - 2; i++) {
+        for (int k = 0; k < M; k++)
+            code[i][k] = code[i + 1][k];
+        alf[i].code_len = alf[i + 1].code_len;
+    }
+    for (int i = 0; i < M; i++) {
+        code[n - 2][i] = S[i];
+        code[n - 1][i] = S[i];
+    }
+    code[n - 2][L + 1] = 0;
+    code[n - 1][L + 1] = 1;
+    alf[n - 1].code_len = alf[n].code_len = L + 1;
+}
+
+double CodeBase(vector<code_huf>& alf, int** code) {
+    cout << "Coding..." << endl;
+
+    ifstream f("obj/testBase2.dat", ios::binary);
+    ofstream fcoded ("obj/BaseCoded.dat");
+    int f_compression = 0;
+    int fcoded_compression = 0;
+    if (f.is_open() && fcoded.is_open())
+    {
+        char buffer;
+        int size = alf.size();
+        while (!f.eof())
+        {
+            f >> buffer;
+            ++f_compression;
+            for (int i = 0; i < size; i++) {
+                if (buffer == alf[i].letter) {
+                    for (int j = 0; j < alf[i].code_len; j++) {
+                        fcoded << code[i][j];
+                        ++fcoded_compression;
+                    }
+                }
+            }
+        }
+
+        f.close();
+        fcoded.close();
+        cout << "File has been coded" << endl;
+    }
+    else
+    {
+        cout << "Error opening file!" << endl;
+        exit(-1);
+    }
+    
+    return fcoded_compression / (double)f_compression;
 }
